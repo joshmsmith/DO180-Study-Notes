@@ -24,9 +24,19 @@
 	podman cp /path/on/host containername:/path/on/container
 	podman exec mysql /bin/bash -c 'mysql -uuser1 -pmypa55 items < /db.sql'
 	
-## persistent storage
+### persistent storage
 	mkdir /home/jsmith/dbfiles
 	podman unshare chown -R 27:27 /home/jsmith/dbfiles #change ownership to mysql, uid 27
 	sudo semanage fcontext -a -t container_file_t '/home/jsmith/dbfiles(/.*)?' #apparently we're setting SELinux contexts now
 	sudo restorecon -Rv /home/jsmith/dbfiles
 	podman run -v /path/on/host:/path/in/container/filesystem ubi8:ubi:latest #mount a volume
+
+### makin new images
+	podman exec -it my-container /bin/bash #then change something
+	podman commit -a "its me" image-name repo/new-image-name:tag
+	
+	podman build --layers=false -t repo/name . # where the current directory contains a dockerfile
+	
+	
+## oc stuff
+	#you konw this
